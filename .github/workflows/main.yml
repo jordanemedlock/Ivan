@@ -16,7 +16,7 @@ jobs:
   # This workflow contains a single job called "build"
   build-brains:
     # The type of runner that the job will run on
-    runs-on: [self-hosted, Brains]
+    runs-on: [self-hosted, gpu]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -29,7 +29,7 @@ jobs:
           cd brain
           docker compose build
   deploy-brains:
-    runs-on: [self-hosted, Brains]
+    runs-on: [self-hosted, gpu]
     needs: build-brains
     
     steps:
