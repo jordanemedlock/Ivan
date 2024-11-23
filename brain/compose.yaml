@@ -1,4 +1,24 @@
 services:
+  ollama-backend:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama:/root/.ollama
+    restart: always
+    container_name: ollama-backend
+
+  ollama-openweb-ui:
+    image: ghcr.io/open-webui/open-webui:main
+    ports:
+      - "3000:8080"
+    environment:
+      - OLLAMA_API_BASE_URL=http://ollama-backend:11434/api
+    depends_on:
+      - ollama-backend
+    restart: always
+    container_name: ollama-openweb-ui
+
   web:
     image: nginx
     volumes:
@@ -20,10 +40,16 @@ services:
     stop_signal: SIGINT
     environment:
       - FLASK_SERVER_PORT=9091
+      - MONGO_URI=mongodb://mongo:27017
     volumes:
       - ./flask:/src
+    develop:
+      watch:
+        - action: sync
+          path: ./flask
+          target: /src
     depends_on:
-      -  mongo  
+      -  mongo
 
   mongo:
     image: mongo

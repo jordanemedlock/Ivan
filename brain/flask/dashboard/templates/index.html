@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %} 
+    Hello World!
+    <ul>
+    {% for event in events %} 
+        <li>
+            {{ event.event_time }}
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}
